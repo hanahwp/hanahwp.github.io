@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>서버팀 일지 (HTML 변환)</title>
+<style>
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Inter, 'Noto Sans KR', Arial, sans-serif; line-height: 1.6; margin: 2rem; }
+h1 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+h2 { margin-top: 2rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+h3 { margin-top: 1rem; color: #333; }
+nav.toc { background: #f7f7f7; border: 1px solid #e2e2e2; padding: 1rem; border-radius: .5rem; }
+nav.toc ul { margin: 0; padding-left: 1.2rem; }
+nav.toc li { margin: .25rem 0; }
+.meta { color: #666; font-size: .9rem; margin-bottom: 1rem; }
+</style>
+</head>
+<body>
+<h1>박현욱의 서버팀 일지</h1>
+<div class="meta">생성: 2025-09-07 15:44 KST</div>
+<nav class="toc">
+  <strong>목차</strong>
+  <ul>
+    <li><a href="#chapter-1">Chapter 1: 재부팅 (24/11/02, 토)</a></li><li><a href="#chapter-2">Chapter 2: 하드 교체 (24/05/29)</a></li><li><a href="#section-3">Chaper 3: 학과에서의 서버 전력 소모량 제출 요청</a></li><li><a href="#chapter-4">Chapter 4: 오믹스 계정(루트권한 계정)의 임의 사용</a></li><li><a href="#section-5">Chaper 5: R 버전 다운그레이드</a></li><li><a href="#chapter-6">Chapter 6: read/write을 많이하면 서버가 느려진다</a></li><li><a href="#chapter-7">Chapter 7: Docker 사용</a></li><li><a href="#chapter-8">Chapter 8: 서버 방화벽 규칙 수정</a></li><li><a href="#chapter-9">Chapter 9: 41서버 하드 복구 (25/05/22)</a></li><li><a href="#chapter-10">Chapter 10: 하드 마운트</a></li><li><a href="#chapter-11">Chapter 11: 스토리지 서버 연결 끊기</a></li><li><a href="#chapter-12">Chapter 12: 41서버 RAID 구조</a></li><li><a href="#chapter-13">Chapter 13: OS 새로 설치</a></li><li><a href="#chapter-14">Chapter 14: NFS(네트워크로 하드 연결)</a></li><li><a href="#chapter-15">Chapter 15: 166 서버 nvidia-driver 업데이트</a></li>
+  </ul>
+</nav>
+<h2 id="chapter-1">Chapter 1: 재부팅 (24/11/02, 토)</h2>
+<p><strong>목적:</strong> 학교 계획 정전 이전에 재부팅 필요. 또는 하드 교체 시 재부팅 필요.</p>
+<h3>방법</h3>
+<p><strong>서버 종료:</strong> sudo shutdown -h now</p>
+<p><strong>서버 켜기:</strong> 전원 버튼 누르기</p>
+<h3>sudo mount -a</h3>
+<h3>비고</h3>
+<p>178은 부팅이 잘 안되므로 다음과 같이 해야함</p>
+<h3>F11 눌러서 부팅 옵션 Ubuntu 선택</h3>
+<p>GUI 해제하려면 ctrl+alt+F1눌러서 CLI 창으로 만들기</p>
+<p></p>
+<h2 id="chapter-2">Chapter 2: 하드 교체 (24/05/29)</h2>
+<h3>문제 상황</h3>
+<p>178 서버 하드에 빨간 불이 들어오고 삐- 소리가 난다(24/05/29, 24/07/05)</p>
+<p>128 서버 하드에도 빨간 불이 들어오고 삐- 소리가 난다</p>
+<h3>해결 방법</h3>
+<h3>준비물을 챙긴다</h3>
+<h3>숫자를 적을만한 스카치테이프 또는 포스트 잇</h3>
+<h3>펜/유성매직</h3>
+<h3>드라이버(41은 예외)</h3>
+<h3>여분의 하드</h3>
+<h3>하드를 교체한다</h3>
+<p>178, 128의 경우 분홍색 누르면 하드가 톡-하고 나온다. 플라스틱을 잡고 하드를 쭉 빼면 된다.</p>
+<h3>렉에서 하드 분리(드라이버)</h3>
+<h3>하드 교체 후 삽입</h3>
+<p><strong>고장 하드에 서버 번호와 하드 번호를 적는다 (ex:</strong> 128, 10번)</p>
+<h3>재부팅(재부팅 란 참고)</h3>
+<h3>비고</h3>
+<p>RAID 결성될 때까지 서버를 얌전히 써야 한다 (약 2주, RAID 부분 참고)</p>
+<p>178은 서버 넣고 재부팅 후에도 삐 소리가 한동안 난다.</p>
+<h3>고장난 하드는 캐비넷에 보관 중</h3>
+<h2 id="section-3">Chaper 3: 학과에서의 서버 전력 소모량 제출 요청</h2>
+<p><strong>시리얼 넘버 확인함:</strong> sudo dmidecode -t system</p>
+<p>슈퍼솔루션에게 시리얼 넘버 전달 후 전력 소모량 확인 부탁함.</p>
+<h3>서버관리 구글시트에 업데이트.</h3>
+<p></p>
+<h2 id="chapter-4">Chapter 4: 오믹스 계정(루트권한 계정)의 임의 사용</h2>
+<p><strong>문제 상황:</strong> 누군가가 41과 128 서버 R버전을 임의로 업데이트함.</p>
+<p><strong>해결 방법:</strong> 새로운 비밀번호: 기존 비번에 “최” 를 추가함.</p>
+<p><strong>비고:</strong> 문제상황을 파악하는 데 도움이 된 128 omics계정 histroy / 41 omics 계정 history</p>
+<h2 id="section-5">Chaper 5: R 버전 다운그레이드</h2>
+<h3>문제 상황</h3>
+<p>Rstudio 버전에 비해 사용하는 R 버전이 너무 높아서 plot을 그리지 못하고 pdf 저장도 안됨. ()</p>
+<p>R 버전에 맞춰 Rstudio 를 업그레이드하고자 했으나 해당 서버가 사용하는 Ubuntu 18.04에선 RStudio 2022.07.x가 가능한 최상위 버전임.</p>
+<p><strong>해결 방법:</strong> tar.gz, make</p>
+<p>sudo apt remove r-recommended r-base r-base-core r-base-dev</p>
+<p>### conda deactivate 없이 make하면, $PATH에서 anaconda/miniconda의 bin을 사용하고 /user/bin을 사용하지 않음.</p>
+<h3>conda deactivate</h3>
+<h3>tar zxf R-4.1.2.tar.gz</h3>
+<p>### with x 는 GUI를 쓰는지임. default 가 yes임.</p>
+<p>./configure   --prefix=/usr   --enable-R-shlib   --enable-memory-profiling   --with-blas --with-lapack --with-x=no</p>
+<h3>make</h3>
+<h3>## 도중에 java 없는 거 발견함.</h3>
+<p>sudo apt install default-jdk</p>
+<h3>## 자꾸 pdflatex없다고 그래서</h3>
+<p>sudo apt install texlive-latex-base texlive-latex-extra</p>
+<h3>which pdflatex</h3>
+<p>### 그래도 pdflatex위치를 못 찾길래 지정해줌.</p>
+<p>make PDFLATEX=/usr/bin/pdflatex</p>
+<h3>sudo make install</h3>
+<p><strong>실패 케이스:</strong> apt install</p>
+<p>sudo apt install r-base=4.1.2-1.2004.0 r-base-html=4.1.2-1.2004.0 r-doc-html=4.1.2-1.2004.0 r-recommended=4.1.2-1.2004.0   r-base-dev=4.1.2-1.2004.0</p>
+<p>를 해봤으나, r-cran-* 들의 버전을 일일히 다 써주지 않는 이상 계속 다음과 같은 에러가 뜸. 그러나 일일히 다 써주긴 오바임.</p>
+<p><strong>r-recommended:</strong> Depends: r-cran-cluster (&gt;= 1.9.6-2) but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-mgcv (&gt;= 1.1.5) but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-nlme (&gt;= 3.1.52) but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-rpart (&gt;= 3.1.20) but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-survival (&gt;= 2.13.2-1) but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-mass but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-class but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-nnet but it is not going to be installed</p>
+<p><strong>Depends:</strong> r-cran-matrix but it is not going to be installed</p>
+<p>참고로, r-cran* 들은 r-base-core의 버전을 따름.</p>
+<p></p>
+<h2 id="chapter-6">Chapter 6: read/write을 많이하면 서버가 느려진다</h2>
+<p><strong>문제 상황:</strong> CPU, memory가 여유로움에도 불구하고 서버 속도가 너무 느림.</p>
+<p><strong>원인:</strong> 서버 내 (혹은 연결된 스토리지 서버의) read/write가 너무 많음.</p>
+<p><strong>read/write를 너무 많이 하는 프로세스가 있는지 검사하는 방법:</strong> </p>
+<p>iostat -xm 5 을 봤을 때 %util이 100임.</p>
+<h3>pistat -dl 5</h3>
+<p></p>
+<h2 id="chapter-7">Chapter 7: Docker 사용</h2>
+<p><strong>목적:</strong> 계정에 sudo 권한을 주지 않으면서 docker로 sudo 사용할 수 있고자 함</p>
+<p><strong>해결 방법:</strong> docker라는 그룹을 만들어서 sudo 권한을 주고, 그 그룹에 사용자를 추가함.</p>
+<p><strong>getent group docker:</strong> 도커 그룹에 들어간 user list 보여줌</p>
+<p><strong>usermod -aG docker sungie:</strong> 도커 그룹에 성이 추가</p>
+<p><strong>출처:</strong> ()</p>
+<p></p>
+<h2 id="chapter-8">Chapter 8: 서버 방화벽 규칙 수정</h2>
+<h3>문제 상황</h3>
+<p>외국에서 연수하는 규희언니가 41서버 접속을 못함</p>
+<p>학교 와이파이를 쓰고 있음에도 불구하고 KVPN을 사용해야만 서버 접속 가능</p>
+<p><strong>해결 방법:</strong> ufw를 통해서 서버 방화벽을 관리할 수 있음</p>
+<p><strong>서버의 방화벽 접속 규칙 리스트 확인:</strong> sudo ufw status verbose</p>
+<p><strong>서버로 접속할 IP 주소를 추가함:</strong> sudo ufw allow from 192.249.0.0/16 to any port 7778</p>
+<p><strong>주의사항:</strong> 예외적인 경우에만 사용!! 비추천!</p>
+<p></p>
+<h2 id="chapter-9">Chapter 9: 41서버 하드 복구 (25/05/22)</h2>
+<h3>문제 상황(25/05/22)</h3>
+<h3>메모리가 터져서 전원 강제 종료함</h3>
+<p>자체적으로 xfs_repair 하려 했으나, 다음과 같은 에러가 뜸</p>
+<p>Phase 1 - find and verify superblock...</p>
+<h3>Phase 2 - zero log...</h3>
+<p>- scan filesystem freespace and inode maps...</p>
+<h3>- found root inode chunk</h3>
+<h3>…</h3>
+<p>Phase 6 - check inode connectivity...</p>
+<p>- ensuring existence of lost+found directory</p>
+<p>- traversing filesystem starting at / ...</p>
+<h3>- traversal finished ...</h3>
+<p>- traversing all unattached subtrees ...</p>
+<h3>- traversals finished ...</h3>
+<p>- moving disconnected inodes to lost+found ...</p>
+<p>disconnected inode 15032394022, moving to lost+found</p>
+<p>fatal error -- name create failed in lost+found (28) filesystem may be out of space</p>
+<p><strong>원인:</strong> 41서버는 불량 하드 신호가 뜨지 않아서, 고장난 하드임에도 교체하지 않고 사용했음</p>
+<h3>과정</h3>
+<p><strong>명정보에 하드 복구 대략의 견적:</strong> 하드 개당 121만원, 20개 총 합 2420만원의 복구 비용을 요구. 하드 복구 실패 시 30%만 지불 약속.</p>
+<p>아토즈씨엔텍(이하 아토즈)을 중간에 껴서 거래함. 아토즈 직원이 출장 와서 서버 수거해 감.</p>
+<p>아토즈 자체적으로 복구해본다 했으나 실패 (약 2주 소요)</p>
+<p>명정보로 보냄. 당초 2주를 이야기했으나 약 두달로 더 오래 걸림.</p>
+<p>복구파일 리스트를 받았으나 60TB(절반) 정도만 복구됨.</p>
+<p>아토즈가 명정보에게 확인차 데이터를 받아봐야겠다고 요구했고, 그 사이 우리가 받은 데이터를 백업함.</p>
+<h3>받은 압축 파일들이 많이 손상됨을 확인</h3>
+<p>아토즈가 명정보에게 실패이고 30프로만 지불할 것을 상의해줌.</p>
+<p></p>
+<h2 id="chapter-10">Chapter 10: 하드 마운트</h2>
+<p><strong>목적:</strong> 외장하드 마운트</p>
+<h3>방법</h3>
+<p><strong>USB로 외장하드 연결:</strong> sudo fdisk -l</p>
+<p><strong>Mount 목적지 폴더 생성:</strong> mkdir smtmp</p>
+<p>sudo mount /dev/sde2 smtmp</p>
+<p></p>
+<h2 id="chapter-11">Chapter 11: 스토리지 서버 연결 끊기</h2>
+<p><strong>문제 상황:</strong> df -h나 홈(/home/omics/) 에서 ls가 안된다.</p>
+<p><strong>원인:</strong> 스토리지 서버(41) 연결이 끊겼는데 찾느라 로딩이 안되는 것임.</p>
+<h3>해결 방법</h3>
+<h3>sudo vim /etc/fstab</h3>
+<p><strong>연결 끊긴 디스크 mount에 다음과 같이 주석처리:</strong> </p>
+<p><strong>#143.248.31.41:</strong> /home/omics/DATA3 /home/omics/DATA3/ nfs defaults 0 0</p>
+<p><strong>#143.248.31.41:</strong> /home/omics/DATA4 /home/omics/DATA4/ nfs defaults 0 0</p>
+<p><strong>#143.248.31.41:</strong> /home/omics/DATA5 /home/omics/DATA5/ nfs defaults 0 0</p>
+<p></p>
+<h2 id="chapter-12">Chapter 12: 41서버 RAID 구조</h2>
+<h3>41은 RAID60 구조로 되어있다.</h3>
+<p><strong>RAID0:</strong> 성능은 좋으나, 고장 내성이 없음.</p>
+<p><strong>RAID6:</strong> 그룹 중 2개를 패리티(parity)로 사용. 패리티는 장애/오류를 복구하기 위한 보조 정보임.</p>
+<p>따라서 RAID60은, 두개의 그룹으로 나눴고, 각 그룹 내 2개까지는 고장 내성 있음.</p>
+<p>RAID 내에서 오류 복구하는 동안은 읽기/수정/쓰기를 하므로 하드 성능이 좀 떨어짐</p>
+<p>이론적으로 각 그룹 당 두개를 교체할 수 있긴 하나 하나씩 교체하는 것을 권장.</p>
+<p></p>
+<h2 id="chapter-13">Chapter 13: OS 새로 설치</h2>
+<p><strong>문제 상황:</strong> 뭔가 시스템이 꼬여서 다시 설치함.</p>
+<h3>방법</h3>
+<p><strong>우분투 디스크 만들기:</strong> 공USB에 서버 용 ubuntu 20.04 복사함.</p>
+<p>부팅 시 F11? 눌러서 부팅메뉴 들어가서 설치.</p>
+<p>이때 225GB에 OS 설치하도록 유의하기! HDD에 설치하면 다 포맷되는겨.</p>
+<p><strong>고정IP 설정:</strong> </p>
+<p>sudo vim /etc/netplan/00-installer-config.yaml 한 후 다른 서버 거 보고 베끼기</p>
+<h3>sudo netplan apply</h3>
+<h3>HDD mount</h3>
+<p>Mount point (/home/omics/DATA8, 9) 만들기</p>
+<h3>sudo blkid로 UUID 확인</h3>
+<h3>sudo vim /etc/fstab 수정</h3>
+<p></p>
+<h2 id="chapter-14">Chapter 14: NFS(네트워크로 하드 연결)</h2>
+<p><strong>문제 상황:</strong> 166에 DATA9 연결</p>
+<p><strong>참고:</strong> </p>
+<p></p>
+<h2 id="chapter-15">Chapter 15: 166 서버 nvidia-driver 업데이트</h2>
+<p><strong>문제 상황:</strong> nvidia-driver 11.8 이상이어야 돌아가는 툴들이 있어서 업데이트를 하고자 함. 그러나 nvidia-toolkit와는 다르게 nvidia-driver은 sudo가 필요함.</p>
+<h3>방법</h3>
+<p><strong>혹시 아무 조치 없이 설치될 수도 있으니 이거 해보기(버전은 엔비디아 들어가서 확인):</strong> Sudo apt-get install nvidia-driver-525</p>
+<p>몇몇 툴 지워야 깔아준다고 해서, Nvidia-driver 관련된 거 다 지우기. Sudo apt-get remove –purge nvidia-*</p>
+<p><strong>그래도 안 지워진 것들 하나하나 지워주기:</strong> sudo apt-get remove --purge libnvidia-gl</p>
+<p><strong>현재 안 쓰이는 거 지우기:</strong> Sudo apt autoremove</p>
+<p>다시 sudo apt install nvidia-driver-525하기.</p>
+<h3>Sudo reboot하기.</h3>
+<h3>Nvidia-smi로 버전 확인.</h3>
+<p>혹시 안될까봐 기존 툴들을 다 복사해서 보관해뒀음! 조심성 필수.</p>
+<p></p>
+</body>
+</html>
